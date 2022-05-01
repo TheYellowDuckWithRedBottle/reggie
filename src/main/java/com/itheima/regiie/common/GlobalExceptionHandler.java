@@ -19,7 +19,8 @@ public class GlobalExceptionHandler {
         if(ex.getMessage().contains("Dulicate entry")){
             String[] msg= ex.getMessage().split("");
             String msg1= msg[2]+"已存在";
-            R.error(msg1);
+           return R.error(msg1);
+
         }
         return R.error("失败了");
     }
