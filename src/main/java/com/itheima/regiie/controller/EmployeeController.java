@@ -64,8 +64,8 @@ public class EmployeeController  {
         log.info("新增员工");
 
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
         Long empId=(Long) request.getSession().getAttribute("employee");
 
@@ -104,10 +104,28 @@ public class EmployeeController  {
         log.info(employee.toString());
 
         Long empId = (Long)request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(empId);
         employeeService.updateById(employee);
         return R.success("员工信息修改成功");
+
+    }
+
+    /**
+     * 根据代码查询员工
+     * @param id
+     * @return
+     */
+
+    @GetMapping("{/id}")
+    public R<Employee> getById(@PathVariable Long id){
+        log.info("根据id查询员工信息");
+        Employee empolyee = employeeService.getById(id);
+        if(empolyee!=null){
+            return R.success(empolyee);
+        }else{
+            return R.error("为查找到员工");
+        }
 
     }
 
