@@ -1,6 +1,7 @@
 package com.itheima.regiie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.itheima.regiie.common.BaseContext;
 import com.itheima.regiie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -31,6 +32,9 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         if(request.getSession().getAttribute("employee")!=null){
+
+            Long empId = (Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(empId);
                filterChain.doFilter(request,response);
                return;
         }
