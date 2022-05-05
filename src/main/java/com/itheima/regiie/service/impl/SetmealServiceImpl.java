@@ -7,6 +7,7 @@ import com.itheima.regiie.mapper.EmployeeMapper;
 import com.itheima.regiie.mapper.SetmealMapper;
 import com.itheima.regiie.service.EmployeeService;
 import com.itheima.regiie.service.SetmealService;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName
@@ -15,5 +16,6 @@ import com.itheima.regiie.service.SetmealService;
  * @Date 2022/5/5 13:19
  * @Version 1.0
  **/
+@Service
 public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> implements SetmealService {
 }
