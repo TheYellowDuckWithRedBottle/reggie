@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@WebFilter(filterName="loginCheckFilter",urlPatterns = "/*")
+@WebFilter(filterName="loginCheckFilter",urlPatterns = "/*")
 @Slf4j
 public class LoginCheckFilter implements Filter {
     // 路径匹配器
@@ -25,19 +25,19 @@ public class LoginCheckFilter implements Filter {
 
         log.info("拦截到请求"+request.getRequestURI());
         // 不需要处理的地址
-        String[] urls = {"employee/login","employee/logout","/backend/**","/front/**"};
+        String[] urls = {"/employee/login","/employee/logout","/backend/**","/front/**"};
         boolean check = check(urls,requestURI);
+        Long empId = (Long) request.getSession().getAttribute("employee");
+        BaseContext.setCurrentId(empId);
         if(check){
             filterChain.doFilter(request,response);
             return;
         }
         if(request.getSession().getAttribute("employee")!=null){
-
-            Long empId = (Long) request.getSession().getAttribute("employee");
-            BaseContext.setCurrentId(empId);
-               filterChain.doFilter(request,response);
+            filterChain.doFilter(request,response);
                return;
         }
+
         response.getWriter().write(JSON.toJSONString(R.error("NoLogon")));
         return;
     }

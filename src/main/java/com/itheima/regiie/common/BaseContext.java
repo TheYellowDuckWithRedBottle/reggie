@@ -4,7 +4,9 @@ public class BaseContext {
     private static ThreadLocal<Long> _threadLocal = new ThreadLocal<>();
 
      public static void setCurrentId(Long id){
-        _threadLocal.set(id);
+         if(id != null){
+             _threadLocal.set(id);
+         }
     }
 
     public static Long getCurrentId(){
