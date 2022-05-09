@@ -6,6 +6,7 @@ import com.itheima.regiie.entity.DishFlavor;
 import com.itheima.regiie.mapper.CategoryMapper;
 import com.itheima.regiie.mapper.DishFlavorMapper;
 import com.itheima.regiie.service.DishFlavorService;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName
@@ -14,5 +15,6 @@ import com.itheima.regiie.service.DishFlavorService;
  * @Date 2022/5/6 13:47
  * @Version 1.0
  **/
+@Service
 public class DishFlavorServiceImpl extends ServiceImpl<DishFlavorMapper, DishFlavor> implements DishFlavorService {
 }
