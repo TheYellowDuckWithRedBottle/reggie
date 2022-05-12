@@ -25,17 +25,22 @@ public class LoginCheckFilter implements Filter {
 
         log.info("拦截到请求"+request.getRequestURI());
         // 不需要处理的地址
-        String[] urls = {"/employee/login","/employee/logout","/backend/**","/front/**"};
+        String[] urls = {"/employee/login","/employee/logout","/backend/**","/front/**","/common/**","/user/sendMsg","/user/login"};
         boolean check = check(urls,requestURI);
-        Long empId = (Long) request.getSession().getAttribute("employee");
-        BaseContext.setCurrentId(empId);
+
         if(check){
             filterChain.doFilter(request,response);
             return;
         }
         if(request.getSession().getAttribute("employee")!=null){
+            Long empId = (Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(empId);
             filterChain.doFilter(request,response);
                return;
+        }
+        if(request.getSession().getAttribute("user")!=null){
+            Long userId = (Long) request.getSession().getAttribute("userId");
+            BaseContext.setCurrentId(userId);
         }
 
         response.getWriter().write(JSON.toJSONString(R.error("NoLogon")));
