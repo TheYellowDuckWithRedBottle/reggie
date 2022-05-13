@@ -23,9 +23,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/sendMsg")
-    public R<String> sendMsg(@RequestBody User user, HttpSession sesion){
-        // 获取数据号
-        String phone = user.getPhone();
+    public R<String> sendMsg(@RequestBody Map user, HttpSession sesion){
+        // 获取手机号
+        String phone = user.get("phone").toString();
 
         if(StringUtils.isNotEmpty(phone)){
             // 生成随机数
@@ -33,7 +33,7 @@ public class UserController {
             //调用阿里云
             //SMSUtils.sendMessage("瑞吉外卖","",phone,code);
             System.out.println(code);
-            sesion.setAttribute(phone,code);
+            sesion.setAttribute("code",code);
             return R.success("手机验证码发送成功");
         }
 
