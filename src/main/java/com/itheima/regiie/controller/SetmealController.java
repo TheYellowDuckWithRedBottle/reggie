@@ -3,8 +3,10 @@ package com.itheima.regiie.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.regiie.common.R;
+import com.itheima.regiie.dto.DishDto;
 import com.itheima.regiie.dto.SetmealDto;
 import com.itheima.regiie.entity.Category;
+import com.itheima.regiie.entity.Dish;
 import com.itheima.regiie.entity.Setmeal;
 import com.itheima.regiie.service.CategoryService;
 import com.itheima.regiie.service.SetmealDishService;
@@ -82,9 +84,17 @@ public class SetmealController {
     }
 
     @DeleteMapping
-
     public R<String> delete(@RequestParam List<Long> ids) {
         setmealService.removeWithDish(ids);
         return R.success("删除套餐成功");
+    }
+    @GetMapping("/list")
+    public R<List<Setmeal>> getSetmeal(Setmeal setmeal){
+        LambdaQueryWrapper<Setmeal> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(setmeal.getCategoryId()!=null, Setmeal::getCategoryId,setmeal.getCategoryId());
+        wrapper.eq(Setmeal::getStatus,setmeal.getStatus());
+        wrapper.orderByDesc(Setmeal::getUpdateTime);
+       List<Setmeal> listsetMeal =  setmealService.list(wrapper);
+        return R.success(listsetMeal);
     }
 }

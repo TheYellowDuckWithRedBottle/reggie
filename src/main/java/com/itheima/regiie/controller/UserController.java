@@ -57,8 +57,8 @@ public class UserController {
                 finduser.setPhone(phone);
                 finduser.setStatus(1);
                 userService.save(finduser);
-                session.setAttribute("user",finduser.getId());
             }
+            session.setAttribute("user",finduser.getId());
             return R.success(finduser);
         }
 

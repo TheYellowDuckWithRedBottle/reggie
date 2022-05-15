@@ -6,6 +6,7 @@ import com.itheima.regiie.common.R;
 import com.itheima.regiie.dto.DishDto;
 import com.itheima.regiie.entity.Category;
 import com.itheima.regiie.entity.Dish;
+import com.itheima.regiie.entity.DishFlavor;
 import com.itheima.regiie.service.CategoryService;
 import com.itheima.regiie.service.DishFlavorService;
 import com.itheima.regiie.service.DishService;
@@ -99,14 +100,24 @@ public class DishController {
      */
 
     @GetMapping("/list")
-    public R<List<Dish>> list(Dish dish){
+    public R<List<DishDto>> list(Dish dish){
         LambdaQueryWrapper<Dish> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(dish.getCategoryId()!=null,Dish::getCategoryId,dish.getCategoryId());
         wrapper.orderByDesc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
         // 1起售状态
         wrapper.eq(Dish::getStatus,1);
         List<Dish>  list = dishService.list(wrapper);
-        return R.success(list);
+        List<DishDto> listDishDto = list.stream().map(item->{
+            DishDto dishDto = new DishDto();
+            BeanUtils.copyProperties(item,dishDto);
+            LambdaQueryWrapper<DishFlavor> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(DishFlavor::getDishId,item.getId());
+            dishDto.setFlavors(dishFlavorService.list(queryWrapper));
+            return dishDto;
+        }).collect(Collectors.toList());
+
+        System.out.println(listDishDto);
+        return R.success(listDishDto);
     }
 
 }
