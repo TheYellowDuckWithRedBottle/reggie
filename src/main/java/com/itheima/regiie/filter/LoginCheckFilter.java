@@ -31,6 +31,8 @@ public class LoginCheckFilter implements Filter {
                 "/front/**",
                 "/common/**",
                 "/user/sendMsg",
+                "/dish/**",
+                "/category/**",
                 "/user/login"};
         boolean check = check(urls,requestURI);
 
@@ -45,7 +47,8 @@ public class LoginCheckFilter implements Filter {
                return;
         }
         if(request.getSession().getAttribute("user")!=null){
-            Long userId = (Long) request.getSession().getAttribute("userId");
+            Long userId = (Long) request.getSession().getAttribute("user");
+            filterChain.doFilter(request,response);
             BaseContext.setCurrentId(userId);
         }
 
