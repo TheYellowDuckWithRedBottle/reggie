@@ -23,7 +23,7 @@ public class LoginCheckFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String requestURI = request.getRequestURI();
 
-        log.info("拦截到请求"+request.getRequestURI());
+
         // 不需要处理的地址
         String[] urls = {"/employee/login",
                 "/employee/logout",
@@ -31,8 +31,6 @@ public class LoginCheckFilter implements Filter {
                 "/front/**",
                 "/common/**",
                 "/user/sendMsg",
-                "/dish/**",
-                "/category/**",
                 "/user/login"};
         boolean check = check(urls,requestURI);
 
@@ -48,10 +46,11 @@ public class LoginCheckFilter implements Filter {
         }
         if(request.getSession().getAttribute("user")!=null){
             Long userId = (Long) request.getSession().getAttribute("user");
-            filterChain.doFilter(request,response);
             BaseContext.setCurrentId(userId);
+            filterChain.doFilter(request,response);
+            return;
         }
-
+        log.info("拦截到请求"+request.getRequestURI());
         response.getWriter().write(JSON.toJSONString(R.error("NoLogon")));
         return;
     }
