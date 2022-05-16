@@ -19,3 +19,14 @@ mybatis-plus:
       id-type: ASSIGN_ID
 reggie:
   path: D:\
+redis:
+  host: localhost
+  port: 6379
+  #password: 123456
+  database: 0
+  jedis:
+    pool:
+      max-active: 8
+      max-wait: 1ms
+      max-idle: 4
+      min-idle: 0
