@@ -9,10 +9,13 @@ import com.itheima.regiie.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -21,6 +24,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate<Object,Object> redistemplate;
 
     @PostMapping("/sendMsg")
     public R<String> sendMsg(@RequestBody Map user, HttpSession sesion){
@@ -34,6 +39,8 @@ public class UserController {
             //SMSUtils.sendMessage("瑞吉外卖","",phone,code);
             System.out.println(code);
             sesion.setAttribute("code",code);
+
+            redistemplate.opsForValue().set(phone,code,5, TimeUnit.MINUTES);
             return R.success("手机验证码发送成功");
         }
 
@@ -46,7 +53,9 @@ public class UserController {
         String phone = user.get("phone").toString();
         String code = user.get("code").toString();
 
-        if(session.getAttribute("code").equals(code)){
+        String redisCode = redistemplate.opsForValue().get(phone).toString();
+
+        if(redisCode.equals(code)){
             LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(User::getPhone,phone);
 
@@ -59,6 +68,7 @@ public class UserController {
                 userService.save(finduser);
             }
             session.setAttribute("user",finduser.getId());
+            redistemplate.delete(phone);
             return R.success(finduser);
         }
 
