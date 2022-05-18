@@ -19,7 +19,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/addressBook")
 public class AddressBookController {
     @Autowired
     private AddressBookService addressBookService;
@@ -40,7 +40,7 @@ public class AddressBookController {
      * @param addressBook
      * @return
      */
-    @PostMapping("/default")
+    @PutMapping("/default")
     public R<AddressBook> setDefault(@RequestBody AddressBook addressBook){
         LambdaUpdateWrapper<AddressBook> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
@@ -53,6 +53,7 @@ public class AddressBookController {
 
     }
 
+
     @GetMapping("/{id}")
     public R get(@PathVariable Long id){
         AddressBook addressBook = addressBookService.getById(id);
@@ -62,8 +63,11 @@ public class AddressBookController {
             return R.error("没有找到该地址");
         }
     }
+    /**
+     * 查询默认地址
+     */
 
-    @GetMapping("default")
+    @GetMapping("/default")
     public R<AddressBook> getDefault(){
         LambdaQueryWrapper<AddressBook> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());

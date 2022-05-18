@@ -110,7 +110,7 @@ public class DishController {
 
     @GetMapping("/list")
     public R<List<DishDto>> list(Dish dish){
-        String key = dish.getCategoryId().toString()+dish.getStatus().toString();
+        String key = dish.getCategoryId().toString()+"1";
         List<DishDto>  listDishDto =(List<DishDto>) redisTemplate.opsForValue().get(key);
         if(listDishDto!=null){
             return R.success(listDishDto);
@@ -134,5 +134,12 @@ public class DishController {
         redisTemplate.opsForValue().set(key,listDishDto,60, TimeUnit.MINUTES);
         return R.success(listDishDto);
     }
+
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids){
+        dishService.removeByIds(ids);
+        return R.success("删除成功");
+    }
+
 
 }
