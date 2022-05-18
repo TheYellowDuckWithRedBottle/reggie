@@ -48,7 +48,7 @@ public class CategoryController {
     public R<String> update(@RequestBody Category _category){
         log.info("修改分类");
         cateService.updateById(_category);
-        return null;
+        return R.success("修改成功");
     }
 
     @GetMapping("/list")
