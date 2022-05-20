@@ -9,7 +9,7 @@ server:
 spring:
   cache:
     redis:
-      time-to-live:1800000
+      time-to-live: 1800000
   main:
     allow-bean-definition-overriding: true
   shardingsphere:
