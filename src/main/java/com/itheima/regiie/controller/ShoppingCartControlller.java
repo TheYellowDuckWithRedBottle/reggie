@@ -47,6 +47,7 @@ public class ShoppingCartControlller {
             shoppingCartService.updateById(shoppingCart1);
         }else{
             shoppingCart.setNumber(1);
+            shoppingCart.setCreateTime(LocalDateTime.now());
             shoppingCartService.save(shoppingCart);
             shoppingCart1 = shoppingCart;
         }
